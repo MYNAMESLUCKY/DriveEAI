@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
-import { getAuth, signInWithPhoneNumber, RecaptchaVerifier, ConfirmationResult, User } from "firebase/auth";
+import { auth } from "@/firebase";
+import { signInWithPhoneNumber, RecaptchaVerifier, ConfirmationResult, User } from "firebase/auth";
 import Button from "@/components/ui/Button";
 import toast from "react-hot-toast";
 
@@ -19,24 +20,29 @@ export default function PhoneLoginForm({ onLogin }: { onLogin?: (user: User) => 
   const confirmationResult = useRef<ConfirmationResult | null>(null);
   const recaptchaRef = useRef<HTMLDivElement>(null);
 
+  // Set language (optional)
+  auth.languageCode = 'en'; // or use auth.useDeviceLanguage();
+
+  const setupRecaptcha = () => {
+    if (typeof window !== "undefined" && !window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+        size: 'invisible',
+        callback: (response: any) => {
+          // reCAPTCHA solved, allow signInWithPhoneNumber.
+        },
+      });
+      window.recaptchaVerifier.render();
+    }
+  };
+
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
     try {
-      const auth = getAuth();
-      if (!window.recaptchaVerifier) {
-        window.recaptchaVerifier = new RecaptchaVerifier(
-          auth,
-          "recaptcha-container",
-          {
-            size: "invisible",
-            callback: () => {},
-          }
-        );
-        await window.recaptchaVerifier.render();
-      }
-      confirmationResult.current = await signInWithPhoneNumber(auth, phone, window.recaptchaVerifier);
+      setupRecaptcha();
+      const appVerifier = window.recaptchaVerifier;
+      confirmationResult.current = await signInWithPhoneNumber(auth, phone, appVerifier);
       setStep("otp");
       toast.success("OTP sent to your phone number");
     } catch (err: unknown) {
@@ -80,7 +86,7 @@ export default function PhoneLoginForm({ onLogin }: { onLogin?: (user: User) => 
             className="border border-green-300 rounded px-3 py-2"
             required
           />
-          <div ref={recaptchaRef} id="recaptcha-container" />
+          <div id="recaptcha-container" ref={recaptchaRef} />
           {error && <div className="text-red-600 text-sm">{error}</div>}
           <Button type="submit" loading={loading} fullWidth>Send OTP</Button>
         </form>
