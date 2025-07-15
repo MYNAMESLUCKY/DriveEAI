@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useAuth } from "../AuthProvider";
 import Image from "next/image";
 import FilterBar from "@/components/ui/FilterBar";
 import Button from "@/components/ui/Button";
@@ -48,10 +49,17 @@ const riceTypes = [
   ...Array.from(new Set(riceProducts.map((p) => p.type))),
 ];
 
-export default function ProductsPage() {
+function ProtectedProductsPage() {
+  const { user, loading } = useAuth();
   const [type, setType] = useState("All");
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(100);
+
+  if (loading) return <div className="flex justify-center items-center min-h-screen">Loading...</div>;
+  if (!user) {
+    if (typeof window !== "undefined") window.location.href = "/login";
+    return <div className="flex justify-center items-center min-h-screen">Redirecting to login...</div>;
+  }
 
   const filtered = riceProducts.filter((p) => {
     const typeMatch = type === "All" || p.type === type;
@@ -102,5 +110,9 @@ export default function ProductsPage() {
       </div>
     </div>
   );
+}
+
+export default function ProductsPage() {
+  return <ProtectedProductsPage />;
 }
 // Customization: Replace riceProducts array and images with your real product data and images in /public. 

@@ -1,11 +1,13 @@
 "use client";
 import { useState, Suspense } from "react";
+import { useAuth } from "../AuthProvider";
 import InputField from "@/components/ui/InputField";
 import Button from "@/components/ui/Button";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { db } from "@/firebase";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
 // import ReCAPTCHA from "react-google-recaptcha"; // Deactivated for now
 
 const initialState = {
@@ -47,12 +49,13 @@ function EnquiryFormComponent() {
       });
       setSuccess(true);
       setForm(initialState);
+      toast.success("Order enquiry submitted successfully!");
       // setRecaptcha(null); // Deactivated
     } catch (err: unknown) {
       let message = "Submission failed. Please try again or contact us.";
-      if (typeof err === "string") message = err;
-      else if (err instanceof Error) message = err.message;
+      if (err instanceof Error) message = err.message;
       setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -89,10 +92,20 @@ function EnquiryFormComponent() {
   );
 }
 
+function ProtectedEnquiryForm() {
+  const { user, loading } = useAuth();
+  if (loading) return <div className="flex justify-center items-center min-h-screen">Loading...</div>;
+  if (!user) {
+    if (typeof window !== "undefined") window.location.href = "/login";
+    return <div className="flex justify-center items-center min-h-screen">Redirecting to login...</div>;
+  }
+  return <EnquiryFormComponent />;
+}
+
 export default function EnquiryPage() {
   return (
     <Suspense>
-      <EnquiryFormComponent />
+      <ProtectedEnquiryForm />
     </Suspense>
   );
 }

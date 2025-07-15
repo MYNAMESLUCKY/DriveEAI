@@ -5,6 +5,7 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
@@ -29,6 +30,8 @@ export const getAnalyticsClient = async () => {
   }
   return null;
 };
+
+export const googleProvider = new GoogleAuthProvider();
 
 // .env.local example:
 // NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSy...
