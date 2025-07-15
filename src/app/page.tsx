@@ -3,7 +3,6 @@ import Image from "next/image";
 import SectionTitle from "@/components/ui/SectionTitle";
 import Button from "@/components/ui/Button";
 import StatCard from "@/components/ui/StatCard";
-import Link from "next/link";
 
 export default function Home() {
   return (
@@ -15,7 +14,7 @@ export default function Home() {
         <h1 className="text-4xl sm:text-5xl font-bold mb-2">Welcome to <span className="text-green-700">[Your Rice Dealership]</span></h1>
         <p className="text-lg sm:text-xl text-green-800 mb-6 max-w-2xl">Premium rice varieties, trusted by families and businesses for over <span className="font-semibold">[X years]</span>. Quality, purity, and service you can count on.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link href="/products"><Button>View Products</Button></Link>
+          <Button href="/products">View Products</Button>
         </div>
       </section>
 
@@ -35,7 +34,7 @@ export default function Home() {
         <SectionTitle>Ready to order in bulk?</SectionTitle>
         <p className="mb-4 text-green-700">Request a bulk order quote today!</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link href="/enquiry"><Button variant="secondary">Order Enquiry</Button></Link>
+          <Button href="/enquiry" variant="secondary">Order Enquiry</Button>
         </div>
       </section>
     </div>

@@ -4,6 +4,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary";
   loading?: boolean;
   fullWidth?: boolean;
+  href?: string;
 }
 
 export default function Button({
@@ -12,6 +13,7 @@ export default function Button({
   loading = false,
   fullWidth = false,
   className = "",
+  href,
   ...props
 }: ButtonProps) {
   const base =
@@ -21,6 +23,21 @@ export default function Button({
       ? "bg-green-600 text-white hover:bg-green-700"
       : "bg-white border border-green-600 text-green-700 hover:bg-green-50";
   const width = fullWidth ? "w-full" : "";
+
+  if (href) {
+    // Render as anchor for navigation
+    return (
+      <a
+        href={href}
+        className={`${base} ${color} ${width} ${className}`}
+        {...(props as any)}
+      >
+        {loading ? <span className="animate-spin mr-2">⏳</span> : null}
+        {children}
+      </a>
+    );
+  }
+
   return (
     <button
       className={`${base} ${color} ${width} ${className}`}
@@ -32,4 +49,4 @@ export default function Button({
     </button>
   );
 }
-// Usage: <Button variant="primary">Submit</Button> 
+// Usage: <Button href="/enquiry">Order Enquiry</Button> or <Button>Submit</Button> 
