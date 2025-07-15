@@ -1,8 +1,8 @@
 // RICE DEALERSHIP HOMEPAGE
 import Image from "next/image";
 import SectionTitle from "@/components/ui/SectionTitle";
-import Button from "@/components/ui/Button";
 import StatCard from "@/components/ui/StatCard";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -14,7 +14,9 @@ export default function Home() {
         <h1 className="text-4xl sm:text-5xl font-bold mb-2">Welcome to <span className="text-green-700">[Your Rice Dealership]</span></h1>
         <p className="text-lg sm:text-xl text-green-800 mb-6 max-w-2xl">Premium rice varieties, trusted by families and businesses for over <span className="font-semibold">[X years]</span>. Quality, purity, and service you can count on.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button href="/products">View Products</Button>
+          <Link href="/products" className="rounded-lg font-semibold shadow px-6 py-3 transition focus:outline-none focus:ring-2 focus:ring-green-400 bg-green-600 text-white hover:bg-green-700">
+            View Products
+          </Link>
         </div>
       </section>
 
@@ -34,7 +36,9 @@ export default function Home() {
         <SectionTitle>Ready to order in bulk?</SectionTitle>
         <p className="mb-4 text-green-700">Request a bulk order quote today!</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button href="/enquiry" variant="secondary">Order Enquiry</Button>
+          <Link href="/enquiry" className="rounded-lg font-semibold shadow px-6 py-3 transition focus:outline-none focus:ring-2 focus:ring-green-400 bg-white border border-green-600 text-green-700 hover:bg-green-50">
+            Order Enquiry
+          </Link>
         </div>
       </section>
     </div>
