@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 type ButtonProps =
   | (React.ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -26,16 +27,16 @@ export default function Button({
   const width = fullWidth ? "w-full" : "";
 
   if (href) {
-    // Render as anchor for navigation
+    // Render as Next.js Link for navigation
     return (
-      <a
+      <Link
         href={href}
         className={`${base} ${color} ${width} ${className}`}
         {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
       >
         {loading ? <span className="animate-spin mr-2">⏳</span> : null}
         {children}
-      </a>
+      </Link>
     );
   }
 

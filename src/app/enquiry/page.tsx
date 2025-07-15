@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import InputField from "@/components/ui/InputField";
 import Button from "@/components/ui/Button";
 import SectionTitle from "@/components/ui/SectionTitle";
@@ -18,7 +18,7 @@ const initialState = {
 
 type EnquiryForm = typeof initialState;
 
-export default function EnquiryPage() {
+function EnquiryFormComponent() {
   const searchParams = useSearchParams();
   const riceTypeFromQuery = searchParams.get("riceType") || "";
   const [form, setForm] = useState<EnquiryForm>({ ...initialState, riceType: riceTypeFromQuery });
@@ -86,6 +86,14 @@ export default function EnquiryPage() {
         </form>
       )}
     </div>
+  );
+}
+
+export default function EnquiryPage() {
+  return (
+    <Suspense>
+      <EnquiryFormComponent />
+    </Suspense>
   );
 }
 // reCAPTCHA is deactivated for now. Uncomment to re-enable. 
