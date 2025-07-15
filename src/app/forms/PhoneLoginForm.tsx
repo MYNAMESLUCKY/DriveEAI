@@ -27,7 +27,7 @@ export default function PhoneLoginForm({ onLogin }: { onLogin?: (user: User) => 
     if (typeof window !== "undefined" && !window.recaptchaVerifier) {
       window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
         size: 'invisible',
-        callback: (response: any) => {
+        callback: () => {
           // reCAPTCHA solved, allow signInWithPhoneNumber.
         },
       });

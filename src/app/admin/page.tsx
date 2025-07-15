@@ -165,7 +165,7 @@ export default function AdminPage() {
                               try {
                                 await updateDoc(doc(db, "orderEnquiries", order.id), { processed: !order.processed });
                                 toast.success(order.processed ? "Marked as unprocessed" : "Marked as processed");
-                              } catch (err) {
+                              } catch {
                                 toast.error("Failed to update status");
                               }
                             }}
@@ -181,7 +181,7 @@ export default function AdminPage() {
                               try {
                                 await deleteDoc(doc(db, "orderEnquiries", order.id));
                                 toast.success("Order deleted");
-                              } catch (err) {
+                              } catch {
                                 toast.error("Failed to delete order");
                               }
                             }}
@@ -240,7 +240,7 @@ export default function AdminPage() {
                               try {
                                 await deleteDoc(doc(db, "users", u.id));
                                 toast.success("User deleted");
-                              } catch (err) {
+                              } catch {
                                 toast.error("Failed to delete user");
                               }
                             }}
@@ -345,7 +345,7 @@ export default function AdminPage() {
                             try {
                               await updateDoc(doc(db, "notifications", n.id), { read: !n.read });
                               toast.success(n.read ? "Marked as unread" : "Marked as read");
-                            } catch (err) {
+                            } catch {
                               toast.error("Failed to update notification");
                             }
                           }}
@@ -361,7 +361,7 @@ export default function AdminPage() {
                             try {
                               await deleteDoc(doc(db, "notifications", n.id));
                               toast.success("Notification deleted");
-                            } catch (err) {
+                            } catch {
                               toast.error("Failed to delete notification");
                             }
                           }}
