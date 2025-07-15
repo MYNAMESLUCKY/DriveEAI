@@ -5,7 +5,7 @@ import Button from "@/components/ui/Button";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { db } from "@/firebase";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
-import ReCAPTCHA from "react-google-recaptcha";
+// import ReCAPTCHA from "react-google-recaptcha"; // Deactivated for now
 
 const initialState = {
   name: "",
@@ -22,7 +22,7 @@ export default function EnquiryPage() {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [recaptcha, setRecaptcha] = useState<string | null>(null);
+  // const [recaptcha, setRecaptcha] = useState<string | null>(null); // Deactivated
 
   // TODO: Replace with real rice types or fetch from backend
   const riceTypes = ["Basmati", "Sona Masoori", "Parboiled", "Brown"];
@@ -34,21 +34,17 @@ export default function EnquiryPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!recaptcha) {
-      setError("Please complete the reCAPTCHA.");
-      return;
-    }
     setLoading(true);
     setError("");
     try {
       await addDoc(collection(db, "orderEnquiries"), {
         ...form,
         submittedAt: Timestamp.now(),
-        recaptcha,
+        // recaptcha, // Deactivated
       });
       setSuccess(true);
       setForm(initialState);
-      setRecaptcha(null);
+      // setRecaptcha(null); // Deactivated
     } catch (err: unknown) {
       let message = "Submission failed. Please try again or contact us.";
       if (typeof err === "string") message = err;
@@ -79,15 +75,14 @@ export default function EnquiryPage() {
           </div>
           <InputField label="Quantity (kg)" required name="quantity" value={form.quantity} onChange={handleChange} type="number" min={1} />
           <InputField label="Delivery Location" required name="location" value={form.location} onChange={handleChange} />
-          <div className="flex justify-center my-2">
-            {/* Replace with your real reCAPTCHA site key below */}
+          {/* <div className="flex justify-center my-2">
             <ReCAPTCHA sitekey="YOUR_RECAPTCHA_SITE_KEY" onChange={setRecaptcha} />
-          </div>
+          </div> */}
           {error && <div className="text-red-600">{error}</div>}
-          <Button type="submit" loading={loading} fullWidth disabled={!recaptcha}>Request Quote</Button>
+          <Button type="submit" loading={loading} fullWidth>Request Quote</Button>
         </form>
       )}
     </div>
   );
 }
-// Customization: Replace YOUR_RECAPTCHA_SITE_KEY with your real Google reCAPTCHA v2 site key. 
+// reCAPTCHA is deactivated for now. Uncomment to re-enable. 
