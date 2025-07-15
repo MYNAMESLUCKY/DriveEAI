@@ -1,11 +1,12 @@
 import React from "react";
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary";
-  loading?: boolean;
-  fullWidth?: boolean;
-  href?: string;
-}
+type ButtonProps =
+  | (React.ButtonHTMLAttributes<HTMLButtonElement> & {
+      href?: undefined;
+    })
+  | (React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+      href: string;
+    });
 
 export default function Button({
   children,
@@ -15,7 +16,7 @@ export default function Button({
   className = "",
   href,
   ...props
-}: ButtonProps) {
+}: ButtonProps & { variant?: "primary" | "secondary"; loading?: boolean; fullWidth?: boolean }) {
   const base =
     "rounded-lg font-semibold shadow px-6 py-3 transition focus:outline-none focus:ring-2 focus:ring-green-400";
   const color =
@@ -30,7 +31,7 @@ export default function Button({
       <a
         href={href}
         className={`${base} ${color} ${width} ${className}`}
-        {...(props as any)}
+        {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
       >
         {loading ? <span className="animate-spin mr-2">⏳</span> : null}
         {children}
@@ -38,11 +39,13 @@ export default function Button({
     );
   }
 
+  // Only pass 'disabled' to <button>
+  const { disabled, ...buttonProps } = props as React.ButtonHTMLAttributes<HTMLButtonElement>;
   return (
     <button
       className={`${base} ${color} ${width} ${className}`}
-      disabled={loading || props.disabled}
-      {...props}
+      disabled={loading || disabled}
+      {...buttonProps}
     >
       {loading ? <span className="animate-spin mr-2">⏳</span> : null}
       {children}
