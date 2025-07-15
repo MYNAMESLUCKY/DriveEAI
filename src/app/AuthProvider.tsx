@@ -2,6 +2,7 @@
 import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, User, signOut } from "firebase/auth";
 import { Toaster } from "react-hot-toast";
+import { auth } from "@/firebase";
 
 const AuthContext = createContext<{ user: User | null, loading: boolean }>({ user: null, loading: true });
 
@@ -10,7 +11,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
       setLoading(false);
@@ -35,7 +35,7 @@ export function UserProfileMenu() {
   if (!user) return null;
   const phone = user.phoneNumber || "Unknown";
   const handleLogout = async () => {
-    await signOut(getAuth());
+    await signOut(auth);
     if (typeof window !== "undefined") window.location.href = "/login";
   };
   return (

@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
-import { getAuth, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { auth } from "@/firebase";
 import { googleProvider } from "@/firebase";
 import Button from "@/components/ui/Button";
 
@@ -15,7 +16,6 @@ export default function LoginForm({ onLogin }: { onLogin?: () => void }) {
     setLoading(true);
     setError("");
     try {
-      const auth = getAuth();
       await signInWithEmailAndPassword(auth, email, password);
       onLogin?.();
     } catch (err: unknown) {
@@ -31,7 +31,6 @@ export default function LoginForm({ onLogin }: { onLogin?: () => void }) {
     setLoading(true);
     setError("");
     try {
-      const auth = getAuth();
       await signInWithPopup(auth, googleProvider);
       onLogin?.();
     } catch (err: unknown) {
