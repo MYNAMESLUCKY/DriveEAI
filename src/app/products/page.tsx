@@ -90,7 +90,7 @@ export default function ProductsPage() {
             <div className="text-green-700 mb-1">Type: {product.type}</div>
             <div className="mb-1">Price: <span className="font-bold">₹{product.price}</span> / kg</div>
             <div className="mb-2 text-sm text-green-600">Min Order: {product.minOrder} kg</div>
-            <Button variant="primary" fullWidth>Enquire</Button>
+            <Button variant="primary" fullWidth href={`/enquiry?riceType=${encodeURIComponent(product.type)}`}>Enquire</Button>
           </div>
         ))}
       </div>

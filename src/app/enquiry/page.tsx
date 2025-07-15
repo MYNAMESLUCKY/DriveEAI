@@ -5,6 +5,7 @@ import Button from "@/components/ui/Button";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { db } from "@/firebase";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { useSearchParams } from "next/navigation";
 // import ReCAPTCHA from "react-google-recaptcha"; // Deactivated for now
 
 const initialState = {
@@ -18,7 +19,9 @@ const initialState = {
 type EnquiryForm = typeof initialState;
 
 export default function EnquiryPage() {
-  const [form, setForm] = useState<EnquiryForm>(initialState);
+  const searchParams = useSearchParams();
+  const riceTypeFromQuery = searchParams.get("riceType") || "";
+  const [form, setForm] = useState<EnquiryForm>({ ...initialState, riceType: riceTypeFromQuery });
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
