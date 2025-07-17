@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { auth } from "@/firebase";
-import { googleProvider } from "@/firebase";
+import { auth, googleProvider } from "@/features/auth/firebaseAuthService";
+// TODO: If you need googleProvider, export it from firebaseAuthService.ts
 import Button from "@/components/ui/Button";
 
 export default function LoginForm({ onLogin }: { onLogin?: () => void }) {

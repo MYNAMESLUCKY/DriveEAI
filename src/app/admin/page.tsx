@@ -2,7 +2,7 @@
 import { useAuth } from "../AuthProvider";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { useEffect, useState } from "react";
-import { db } from "@/firebase";
+import { db } from "@/services/firebase";
 import { collection, query, orderBy, onSnapshot, Timestamp, collection as fsCollection, addDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import toast from "react-hot-toast";
 

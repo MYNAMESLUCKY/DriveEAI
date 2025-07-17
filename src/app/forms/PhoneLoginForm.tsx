@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef } from "react";
-import { auth } from "@/firebase";
+import { auth } from "@/features/auth/firebaseAuthService";
 import { signInWithPhoneNumber, RecaptchaVerifier, ConfirmationResult, User } from "firebase/auth";
 import Button from "@/components/ui/Button";
 import toast from "react-hot-toast";

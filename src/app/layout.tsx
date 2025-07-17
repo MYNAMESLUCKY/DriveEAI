@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientRoot from "./ClientRoot";
+import { Toaster } from "react-hot-toast";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,6 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://client1-lilac.vercel.app/'),
   title: "Rice Dealership | Premium Rice Supplier",
   description: "Premium rice varieties, trusted by families and businesses for over X years. Quality, purity, and service you can count on. Order bulk rice at the best prices from a family-owned dealership.",
   openGraph: {
@@ -64,6 +67,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white`}>
+        <Toaster position="top-right" toastOptions={{
+          style: {
+            borderRadius: '12px',
+            background: 'rgba(255,255,255,0.95)',
+            color: '#222',
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.15)',
+            backdropFilter: 'blur(6px)',
+          },
+        }} />
         <ClientRoot>{children}</ClientRoot>
       </body>
     </html>

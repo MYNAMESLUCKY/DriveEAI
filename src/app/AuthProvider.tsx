@@ -1,8 +1,8 @@
 "use client";
 import { ReactNode, createContext, useContext, useEffect, useState } from "react";
-import { getAuth, onAuthStateChanged, User, signOut } from "firebase/auth";
+import { onAuthStateChanged, User, signOut } from "firebase/auth";
 import { Toaster } from "react-hot-toast";
-import { auth } from "@/firebase";
+import { auth } from "@/features/auth/firebaseAuthService";
 
 const AuthContext = createContext<{ user: User | null, loading: boolean }>({ user: null, loading: true });
 
