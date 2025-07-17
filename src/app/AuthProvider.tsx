@@ -1,18 +1,10 @@
-import React, { ReactNode, createContext, useContext, useEffect, useState } from "react";
+"use client";
+import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged, User, signOut } from "firebase/auth";
 import { Toaster } from "react-hot-toast";
-import { auth } from "@/firebase";
+import { auth } from "@/features/auth/firebaseAuthService";
 
-interface AuthContextType {
-  user: User | null;
-  loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
-}
-
-export const AuthContext = createContext<AuthContextType | undefined>(
-  undefined
-);
+const AuthContext = createContext<{ user: User | null, loading: boolean }>({ user: null, loading: true });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
