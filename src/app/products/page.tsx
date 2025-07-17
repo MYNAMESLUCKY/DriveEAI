@@ -5,8 +5,10 @@ const ProductList = React.lazy(() => import("@/features/products/ProductList").t
 
 export default function ProductsPage() {
   return (
-    <Suspense fallback={<div className="flex justify-center items-center min-h-screen">Loading products...</div>}>
-      <ProductList />
-    </Suspense>
+    <div style={{ background: '#fff4ea', minHeight: '100vh' }}>
+      <Suspense fallback={<div className="flex justify-center items-center min-h-screen">Loading products...</div>}>
+        <ProductList />
+      </Suspense>
+    </div>
   );
 }

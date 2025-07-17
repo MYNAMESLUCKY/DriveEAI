@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from 'framer-motion';
 import { Dialog } from '@headlessui/react';
 import { toast } from 'react-hot-toast';
 import { ShoppingCartIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 import { Product } from './types/product';
 import { getProducts } from './productService';
-import Image from 'next/image';
 import Button from '@/components/ui/Button';
 import SectionTitle from '@/components/ui/SectionTitle';
 import FilterBar from '@/components/ui/FilterBar';
@@ -126,64 +126,81 @@ const ProductCard = ({
   product: Product;
   onEnquire: () => void;
   onQuickView: () => void;
-}) => (
-  <motion.div
-    whileHover={{ y: -6, scale: 1.03 }}
-    whileTap={{ scale: 0.98 }}
-    className={clsx(
-      "group bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl overflow-hidden border border-white/30 transition-all duration-300",
-      "hover:shadow-2xl hover:bg-white/90 focus-within:shadow-2xl"
-    )}
-    tabIndex={0}
-    aria-label={`Product: ${product.name}`}
-  >
-    <div className="relative aspect-square overflow-hidden">
-      <Image
-        src={product.image}
-        alt={product.name}
-        fill
-        className="object-cover group-hover:scale-105 transition-transform duration-300"
-        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-    </div>
-    <div className="p-4">
-      <div className="flex justify-between items-start">
-        <div>
-          <h3 className="font-semibold text-gray-900 text-lg">{product.name}</h3>
-          <p className="text-sm text-gray-500">{product.type}</p>
-        </div>
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-          {product.minOrder} quintals min
-        </span>
+}) => {
+  const [imgError, setImgError] = React.useState(false);
+  return (
+    <motion.div
+      whileHover={{ y: -6, scale: 1.015, boxShadow: '0 8px 32px 0 rgba(0,0,0,0.10)', borderColor: '#c6f2e6' }}
+      whileTap={{ scale: 0.98 }}
+      className={clsx(
+        "group relative rounded-3xl overflow-hidden border border-gray-100 bg-white shadow-md transition-all duration-200 mx-2 my-4",
+        "hover:border-emerald-200"
+      )}
+      tabIndex={0}
+      aria-label={`Product: ${product.name}`}
+      style={{ boxShadow: '0 2px 12px 0 rgba(0,0,0,0.06)' }}
+    >
+      {/* Card Image with fallback */}
+      <div className="relative aspect-square overflow-hidden rounded-t-3xl bg-gray-100 flex items-center justify-center">
+        {!imgError ? (
+          <Image
+            src={product.image}
+            alt={product.name}
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            onError={() => setImgError(true)}
+            priority={true}
+          />
+        ) : (
+          <svg width="48" height="48" fill="none" stroke="#cbd5e1" strokeWidth="1.5" viewBox="0 0 24 24">
+            <rect x="3" y="3" width="18" height="18" rx="4" fill="#f3f4f6" />
+            <path d="M8 16l2.5-3 2.5 3 3.5-4.5L21 19H3l5-7z" />
+          </svg>
+        )}
       </div>
-      <div className="mt-3 flex items-center justify-between gap-2">
-        <span className="text-xl font-bold text-gray-900">
-          ₹{product.price}
-          <span className="text-sm font-normal text-gray-500">/quintal</span>
-        </span>
-        <div className="flex gap-2">
-          <Button
-            onClick={onEnquire}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-green-600 text-white hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-          >
-            <ShoppingCartIcon className="w-4 h-4" />
-            Enquire
-          </Button>
-          <Button
-            onClick={onQuickView}
-            variant="secondary"
-            className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-lg border border-green-200 bg-white/70 text-green-700 hover:bg-green-50 focus:ring-2 focus:ring-green-500"
-            aria-label={`Quick view ${product.name}`}
-          >
-            <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /><path d="M2 12C4.5 7 9 4 12 4s7.5 3 10 8c-2.5 5-7 8-10 8s-7.5-3-10-8z" /></svg>
-            Quick View
-          </Button>
+      {/* Card Content */}
+      <div className="p-4 flex flex-col gap-2 min-h-[110px] justify-between">
+        <div className="flex justify-between items-start">
+          <div>
+            <span className="block font-semibold text-gray-900 text-base mb-0.5">
+              {product.name}
+            </span>
+            <p className="text-xs text-gray-400 font-normal mt-0.5">{product.type}</p>
+          </div>
+          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-50 text-gray-500 border border-gray-200">
+            {product.minOrder} min
+          </span>
+        </div>
+        <div className="flex items-end justify-between gap-2 mt-2">
+          <span className="block font-bold text-gray-900 text-lg">
+            ₹{product.price}
+            <span className="text-xs font-normal text-gray-400">/quintal</span>
+          </span>
+          <div className="flex gap-1 pb-1">
+            <Button
+              onClick={onEnquire}
+              className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-lg bg-emerald-100 text-emerald-700 shadow-none hover:bg-emerald-200 focus:ring-2 focus:ring-emerald-200 focus:outline-none transition-all duration-200"
+              style={{ boxShadow: 'none' }}
+            >
+              <ShoppingCartIcon className="w-4 h-4 mr-1" />
+              Enquire
+            </Button>
+            <Button
+              onClick={onQuickView}
+              variant="secondary"
+              className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 hover:border-emerald-200 focus:ring-2 focus:ring-emerald-100 transition-all duration-200"
+              aria-label={`Quick view ${product.name}`}
+            >
+              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /><path d="M2 12C4.5 7 9 4 12 4s7.5 3 10 8c-2.5 5-7 8-10 8s-7.5-3-10-8z" /></svg>
+              Quick View
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
-  </motion.div>
-);
+    </motion.div>
+  );
+};
 
 
 // Pagination Component
@@ -315,44 +332,43 @@ export const ProductList: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl p-8 mb-12 text-white">
-        <div className="max-w-3xl">
-          <h1 className="text-4xl font-bold mb-4">Premium Quality Rice</h1>
-          <p className="text-lg mb-6 opacity-90">
-            Discover our handpicked selection of the finest rice varieties, sourced directly from trusted farmers.
+    <>
+      <section className="relative flex flex-col md:flex-row items-center justify-between min-h-[320px] w-full bg-white rounded-2xl shadow-none mb-8 px-2 sm:px-4 md:px-8 py-10 md:py-16 border border-gray-100 overflow-x-hidden">
+        {/* Left: Heading and Subheading */}
+        <div className="w-full md:w-1/2 flex flex-col items-start justify-center pr-0 md:pr-12 mb-8 md:mb-0">
+          <h1 className="font-serif text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            Premium Rice, Trusted Quality
+          </h1>
+          <p className="text-base md:text-lg text-gray-600 font-light tracking-wide mb-8 max-w-lg">
+            Discover the finest rice varieties with a marketplace experience built on trust, quality, and simplicity. Direct from mills, delivered with care.
           </p>
-          <Button
-            href="#products"
-            className="bg-white text-green-700 hover:bg-gray-100 px-6 py-3 text-lg font-medium"
-          >
+          <a href="#products" className="inline-block px-8 py-3 text-lg font-semibold rounded-full bg-emerald-600 text-white shadow hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-300 transition-all">
             Shop Now
-          </Button>
+          </a>
         </div>
-      </div>
-
-      <div id="products" className="mb-16">
-        <SectionTitle subtitle="Our Premium Selection">
-          Featured Products
-        </SectionTitle>
-
+        {/* Right: Product Image */}
+        <div className="w-full md:w-1/2 flex items-center justify-center mt-4 md:mt-0">
+          <div className="w-80 h-80 rounded-2xl overflow-hidden border border-gray-200 shadow-sm bg-gray-50 flex items-center justify-center">
+            <Image src="/rice1.jpg" alt="Premium Rice" width={320} height={320} className="object-cover w-full h-full" />
+          </div>
+        </div>
+      </section>
+      <div id="products" className="mb-20 px-1 sm:px-2 md:px-8 lg:px-16 xl:px-32 bg-[#fff4ea] min-h-[60vh] pb-10 sm:pb-16 rounded-b-2xl overflow-x-hidden">
         {/* Filter Bar */}
-        <div className="mb-8 bg-white rounded-xl shadow-sm p-4">
+        <div className="mb-8 bg-white rounded-2xl shadow-md border border-gray-200 p-3 sm:p-4 md:p-6 flex flex-wrap gap-4 sm:gap-6 items-center justify-center">
           <FilterBar
             types={riceTypes}
             type={type}
-            setType={setType}
             minPrice={minPrice}
-            setMinPrice={setMinPrice}
             maxPrice={maxPrice}
+            setType={setType}
+            setMinPrice={setMinPrice}
             setMaxPrice={setMaxPrice}
           />
         </div>
-
-        {/* Loading State */}
+        {/* Main Product Grid */}
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-8">
             {[...Array(8)].map((_, i) => (
               <ProductCardSkeleton key={i} />
             ))}
@@ -369,12 +385,12 @@ export const ProductList: React.FC = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3 }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+              className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-8"
             >
               {paginatedProducts.map((product) => (
-                <ProductCard 
-                  key={product.id} 
-                  product={product} 
+                <ProductCard
+                  key={product.id}
+                  product={product}
                   onEnquire={() => handleEnquire(product)}
                   onQuickView={() => { setSelectedProduct(product); setQuickViewOpen(true); }}
                 />
@@ -382,7 +398,6 @@ export const ProductList: React.FC = () => {
             </motion.div>
           </AnimatePresence>
         )}
-
         {/* Quick View Modal */}
         <QuickViewModal
           product={selectedProduct}
@@ -390,7 +405,6 @@ export const ProductList: React.FC = () => {
           onClose={() => setQuickViewOpen(false)}
           onEnquire={() => handleEnquire()}
         />
-
         {/* Pagination */}
         {!loading && pageCount > 1 && (
           <Pagination
@@ -401,6 +415,6 @@ export const ProductList: React.FC = () => {
           />
         )}
       </div>
-    </div>
-  );
+  </>
+);
 };
